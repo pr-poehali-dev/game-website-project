@@ -3,10 +3,11 @@ import Navbar from "@/components/Navbar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Star, MessageCircle, Share2, Award, Clock, Activity, Users, Gamepad2 } from "lucide-react";
+import { Star, MessageCircle, Share2, Award, Clock, Activity, Users, Gamepad2, PlayCircle, Download } from "lucide-react";
 
 const RacingGame = () => {
   const [activeImage, setActiveImage] = useState(0);
+  const [showVideo, setShowVideo] = useState(false);
   
   const gameImages = [
     "https://images.unsplash.com/photo-1590845947698-8924d7409b56?q=80&w=1200&auto=format&fit=crop",
@@ -35,30 +36,92 @@ const RacingGame = () => {
               <span className="text-muted-foreground">(216 отзывов)</span>
             </div>
             
-            {/* Main image */}
+            {/* Main image or video */}
             <div className="relative rounded-lg overflow-hidden mb-4">
-              <img 
-                src={gameImages[activeImage]} 
-                alt="Скриншот из игры" 
-                className="w-full aspect-video object-cover"
-              />
+              {showVideo ? (
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  title="Gameplay video" 
+                  className="w-full aspect-video"
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <img 
+                  src={gameImages[activeImage]} 
+                  alt="Скриншот из игры" 
+                  className="w-full aspect-video object-cover"
+                />
+              )}
+              
+              {!showVideo && (
+                <button 
+                  onClick={() => setShowVideo(true)}
+                  className="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/60 transition-colors"
+                >
+                  <div className="p-4 rounded-full bg-white/20 backdrop-blur-sm">
+                    <PlayCircle className="w-12 h-12 text-white" />
+                  </div>
+                </button>
+              )}
             </div>
             
-            {/* Thumbnails */}
-            <div className="grid grid-cols-4 gap-2 mb-8">
-              {gameImages.map((img, index) => (
-                <div 
-                  key={index} 
-                  className={`cursor-pointer rounded-md overflow-hidden border-2 ${index === activeImage ? 'border-game-accent' : 'border-transparent'}`}
-                  onClick={() => setActiveImage(index)}
-                >
-                  <img 
-                    src={img} 
-                    alt={`Скриншот ${index + 1}`} 
-                    className="w-full aspect-video object-cover"
-                  />
-                </div>
-              ))}
+            {/* Controls */}
+            <div className="flex justify-between mb-4">
+              <button 
+                onClick={() => setShowVideo(false)} 
+                className={`px-4 py-2 rounded-lg border ${!showVideo ? 'bg-game-primary text-white' : 'border-game-primary text-game-primary'}`}
+              >
+                Скриншоты
+              </button>
+              <button 
+                onClick={() => setShowVideo(true)}
+                className={`px-4 py-2 rounded-lg border ${showVideo ? 'bg-game-primary text-white' : 'border-game-primary text-game-primary'}`}
+              >
+                Gameplay видео
+              </button>
+            </div>
+            
+            {/* Thumbnails - Only show when in screenshot mode */}
+            {!showVideo && (
+              <div className="grid grid-cols-4 gap-2 mb-8">
+                {gameImages.map((img, index) => (
+                  <div 
+                    key={index} 
+                    className={`cursor-pointer rounded-md overflow-hidden border-2 ${index === activeImage ? 'border-game-accent' : 'border-transparent'}`}
+                    onClick={() => setActiveImage(index)}
+                  >
+                    <img 
+                      src={img} 
+                      alt={`Скриншот ${index + 1}`} 
+                      className="w-full aspect-video object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {/* Video Tutorial */}
+            <div className="bg-muted p-6 rounded-lg mb-8">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <PlayCircle className="text-game-accent" />
+                Обучающее видео
+              </h3>
+              <p className="mb-4">
+                Не знаете, как начать игру? Посмотрите наше обучающее видео, чтобы быстро освоить основы и стать профессиональным гонщиком!
+              </p>
+              <div className="aspect-video">
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                  title="Обучающее видео" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen
+                ></iframe>
+              </div>
             </div>
             
             {/* Tabs */}
@@ -91,6 +154,17 @@ const RacingGame = () => {
                   <li>Многопользовательские гонки до 16 игроков</li>
                   <li>Еженедельные испытания и сезонные события</li>
                 </ul>
+                
+                <div className="mt-8 p-4 bg-game-accent/10 rounded-lg border border-game-accent">
+                  <h4 className="font-bold text-lg mb-2 text-game-accent flex items-center gap-2">
+                    <Download size={20} />
+                    Бесплатный пробный контент
+                  </h4>
+                  <p>
+                    Попробуйте игру бесплатно! Загрузите демо-версию с тремя трассами и пятью автомобилями, чтобы ощутить скорость и адреналин перед покупкой полной версии.
+                  </p>
+                  <Button className="mt-4 bg-game-accent hover:bg-game-accent/90">Скачать демо-версию</Button>
+                </div>
               </TabsContent>
               
               <TabsContent value="specs" className="mt-6">
@@ -212,6 +286,28 @@ const RacingGame = () => {
                     </p>
                   </div>
                   
+                  <div className="bg-card rounded-lg p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-game-primary flex items-center justify-center text-white font-bold">
+                          И
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">Игорь</h4>
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star key={star} className="w-4 h-4 text-game-accent" fill={star <= 4 ? "currentColor" : "none"} />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-muted-foreground text-sm">25 марта 2025</span>
+                    </div>
+                    <p>
+                      Сначала скачал бесплатную демо-версию, а через два дня уже купил полную игру! Не смог оторваться от игрового процесса. Очень рекомендую даже тем, кто не особо увлекается гонками.
+                    </p>
+                  </div>
+                  
                   <Button variant="outline" className="w-full">Загрузить больше отзывов</Button>
                 </div>
               </TabsContent>
@@ -227,8 +323,13 @@ const RacingGame = () => {
                 Купить игру
               </Button>
               
-              <Button variant="outline" className="w-full mb-6 py-6">
+              <Button variant="outline" className="w-full mb-4 py-6">
                 Добавить в корзину
+              </Button>
+              
+              <Button variant="secondary" className="w-full mb-6 flex items-center justify-center gap-2 py-6">
+                <Download size={18} />
+                Скачать демо-версию
               </Button>
               
               <Separator className="mb-4" />
@@ -240,7 +341,7 @@ const RacingGame = () => {
               
               <div className="flex justify-between mb-4">
                 <span className="text-muted-foreground">Издатель:</span>
-                <span className="font-semibold">ИгроМания Games</span>
+                <span className="font-semibold">Fire Game</span>
               </div>
               
               <div className="flex justify-between mb-4">
@@ -322,6 +423,35 @@ const RacingGame = () => {
                 </div>
               </div>
             </div>
+            
+            <div className="bg-game-accent/10 rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-bold mb-4 text-game-accent">Бесплатные дополнения</h3>
+              <p className="mb-4">При покупке полной версии вы получаете доступ к бесплатным DLC:</p>
+              
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2">
+                  <span className="text-game-accent">✓</span>
+                  <div>
+                    <span className="font-semibold">Пакет "Японские легенды"</span>
+                    <p className="text-sm text-muted-foreground">5 культовых японских спорткаров</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-game-accent">✓</span>
+                  <div>
+                    <span className="font-semibold">Трасса "Токийский дрифт"</span>
+                    <p className="text-sm text-muted-foreground">Ночная трасса с извилистыми виражами</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-game-accent">✓</span>
+                  <div>
+                    <span className="font-semibold">Эксклюзивные скины</span>
+                    <p className="text-sm text-muted-foreground">Набор уникальных оформлений для автомобилей</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -329,7 +459,7 @@ const RacingGame = () => {
       {/* Footer */}
       <footer className="bg-game-dark text-white py-8 mt-12">
         <div className="container mx-auto px-6 text-center">
-          <p>&copy; 2025 ИгроМания. Все права защищены.</p>
+          <p>&copy; 2025 Fire Game. Все права защищены.</p>
         </div>
       </footer>
     </div>

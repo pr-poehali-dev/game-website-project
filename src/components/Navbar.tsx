@@ -5,14 +5,14 @@ const Navbar = () => {
     <nav className="bg-game-dark text-white py-4 px-6 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold flex items-center gap-2">
-          <span className="text-game-accent">🎮</span> ИгроМания
+          <span className="text-game-accent">🔥</span> Fire Game
         </Link>
         
         <div className="flex space-x-6">
           <Link to="/" className="hover:text-game-accent transition-colors">Главная</Link>
           <Link to="/racing-game" className="hover:text-game-accent transition-colors">Гонки</Link>
+          <Link to="/free-games" className="hover:text-game-accent transition-colors">Бесплатные игры</Link>
           <a href="#" className="hover:text-game-accent transition-colors">Новинки</a>
-          <a href="#" className="hover:text-game-accent transition-colors">Обзоры</a>
         </div>
         
         <div className="flex items-center gap-4">
