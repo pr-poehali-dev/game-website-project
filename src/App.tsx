@@ -6,6 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import RacingGame from "./pages/RacingGame";
 import CarGame from "./pages/CarGame";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import GameRules from "./pages/GameRules";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +23,9 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/racing-game" element={<RacingGame />} />
           <Route path="/car-game" element={<CarGame />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/rules" element={<GameRules />} />
           <Route path="/free-games" element={<Index />} /> {/* Временно используем главную страницу */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

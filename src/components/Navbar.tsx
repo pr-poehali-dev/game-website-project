@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, User } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,14 +65,17 @@ const Navbar = () => {
             )}
           </div>
           <Link to="/free-games" className="hover:text-game-accent transition-colors">Бесплатные игры</Link>
-          <a href="#" className="hover:text-game-accent transition-colors">Новинки</a>
+          <Link to="/rules" className="hover:text-game-accent transition-colors">Правила</Link>
           <a href="#" className="hover:text-game-accent transition-colors">Обзоры</a>
         </div>
         
         <div className="hidden md:flex items-center gap-4">
-          <button className="bg-game-primary hover:bg-game-secondary text-white px-4 py-2 rounded-md transition-colors">
+          <Link to="/profile" className="text-white hover:text-game-accent">
+            <User size={20} />
+          </Link>
+          <Link to="/register" className="bg-game-primary hover:bg-game-secondary text-white px-4 py-2 rounded-md transition-colors">
             Войти
-          </button>
+          </Link>
         </div>
       </div>
       
@@ -84,11 +87,12 @@ const Navbar = () => {
             <Link to="/racing-game" className="hover:text-game-accent transition-colors">Гонки</Link>
             <Link to="/car-game" className="hover:text-game-accent transition-colors">Симулятор Вождения</Link>
             <Link to="/free-games" className="hover:text-game-accent transition-colors">Бесплатные игры</Link>
-            <a href="#" className="hover:text-game-accent transition-colors">Новинки</a>
+            <Link to="/rules" className="hover:text-game-accent transition-colors">Правила</Link>
             <a href="#" className="hover:text-game-accent transition-colors">Обзоры</a>
-            <button className="bg-game-primary hover:bg-game-secondary text-white px-4 py-2 rounded-md transition-colors w-full">
+            <Link to="/profile" className="hover:text-game-accent transition-colors">Профиль</Link>
+            <Link to="/register" className="bg-game-primary hover:bg-game-secondary text-white px-4 py-2 rounded-md transition-colors w-full text-center">
               Войти
-            </button>
+            </Link>
           </div>
         </div>
       )}
