@@ -9,6 +9,7 @@ import CarGame from "./pages/CarGame";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import GameRules from "./pages/GameRules";
+import FreeGames from "./pages/FreeGames";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,7 +27,7 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/rules" element={<GameRules />} />
-          <Route path="/free-games" element={<Index />} /> {/* Временно используем главную страницу */}
+          <Route path="/free-games" element={<FreeGames />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
