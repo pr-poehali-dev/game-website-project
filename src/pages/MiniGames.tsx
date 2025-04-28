@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { 
@@ -21,6 +20,44 @@ interface Game {
   color: string;
   game: React.ReactNode;
 }
+
+// Компонент анимации
+const AnimatedDiv = ({ 
+  children, 
+  className = "", 
+  delay = 0,
+  initial = { opacity: 0, y: 20 },
+  animate = { opacity: 1, y: 0 }
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  initial?: Record<string, number>;
+  animate?: Record<string, number>;
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, delay * 1000);
+    
+    return () => clearTimeout(timer);
+  }, [delay]);
+  
+  return (
+    <div 
+      className={`transition-all duration-500 ease-out ${className}`}
+      style={{
+        opacity: isVisible ? animate.opacity : initial.opacity,
+        transform: `translateY(${isVisible ? animate.y : initial.y}px)`,
+        transitionDelay: `${delay}s`
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const MiniGames = () => {
   const [activeGame, setActiveGame] = useState<string | null>(null);
@@ -97,30 +134,27 @@ const MiniGames = () => {
         <div className="text-center mb-4">
           <p className="mb-2">Ходы: {moves}</p>
           {completed && (
-            <motion.div 
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
+            <AnimatedDiv 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
               className="bg-green-100 text-green-800 p-2 rounded"
             >
               Поздравляем! Вы выиграли за {moves} ходов!
-            </motion.div>
+            </AnimatedDiv>
           )}
         </div>
         
         <div className="grid grid-cols-4 gap-2 mb-4">
           {cards.map((card, index) => (
-            <motion.div
+            <div
               key={card.id}
-              className={`w-16 h-16 flex items-center justify-center text-2xl cursor-pointer rounded shadow ${
+              className={`w-16 h-16 flex items-center justify-center text-2xl cursor-pointer rounded shadow transition-all duration-300 hover:scale-105 active:scale-95 ${
                 card.flipped ? (card.matched ? "bg-green-200" : "bg-blue-200") : "bg-indigo-600"
               }`}
               onClick={() => handleCardClick(index)}
-              whileHover={{ scale: card.flipped ? 1 : 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 300 }}
             >
               {card.flipped && card.value}
-            </motion.div>
+            </div>
           ))}
         </div>
         
@@ -139,6 +173,18 @@ const MiniGames = () => {
       setGameActive(true);
       setScore(0);
       setGameOver(false);
+      
+      const intervalId = setInterval(() => {
+        if (Math.random() > 0.8) {
+          setScore(prev => prev + 1);
+        }
+      }, 500);
+      
+      setTimeout(() => {
+        clearInterval(intervalId);
+        setGameOver(true);
+        setGameActive(false);
+      }, 10000 + Math.random() * 5000);
     };
     
     return (
@@ -146,13 +192,11 @@ const MiniGames = () => {
         <div className="mb-4 text-center">
           <p className="text-lg font-bold">Счет: {score}</p>
           {gameOver && (
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+            <AnimatedDiv 
               className="text-red-500"
             >
               Игра окончена!
-            </motion.p>
+            </AnimatedDiv>
           )}
         </div>
         
@@ -160,25 +204,21 @@ const MiniGames = () => {
           <Button onClick={startGame}>Начать игру</Button>
         ) : (
           <div className="relative w-80 h-80 bg-gray-100 border-2 border-gray-400 overflow-hidden">
-            <motion.div
-              className="absolute w-4 h-4 bg-green-500"
-              animate={{ 
-                x: Math.random() * 19 * 20, 
-                y: Math.random() * 19 * 20,
-                transition: { duration: 0.5 }
+            <div
+              className="absolute w-4 h-4 bg-green-500 transition-all duration-500"
+              style={{ 
+                left: `${Math.random() * 19 * 4}px`, 
+                top: `${Math.random() * 19 * 4}px`
               }}
-              style={{ left: 0, top: 0 }}
             />
             
-            <motion.div
-              className="absolute w-4 h-4 bg-red-500"
-              animate={{ 
-                x: Math.random() * 19 * 20, 
-                y: Math.random() * 19 * 20,
-                transition: { duration: 0.5 }
+            <div
+              className="absolute w-4 h-4 bg-red-500 transition-all duration-500"
+              style={{ 
+                left: `${Math.random() * 19 * 4}px`, 
+                top: `${Math.random() * 19 * 4}px`
               }}
-              style={{ left: 0, top: 0 }}
-              onAnimationComplete={() => {
+              onAnimationEnd={() => {
                 if (Math.random() > 0.7 && !gameOver) {
                   setScore(prev => prev + 1);
                 }
@@ -250,29 +290,27 @@ const MiniGames = () => {
     };
     
     const renderSquare = (index: number) => (
-      <motion.div
-        className={`w-20 h-20 border-2 border-gray-300 flex items-center justify-center text-2xl font-bold cursor-pointer ${
+      <div
+        className={`w-20 h-20 border-2 border-gray-300 flex items-center justify-center text-2xl font-bold cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 ${
           board[index] === 'X' ? 'text-blue-500' : 'text-red-500'
         }`}
         onClick={() => handleClick(index)}
-        whileHover={{ scale: board[index] ? 1 : 1.05 }}
-        whileTap={{ scale: 0.95 }}
       >
         {board[index]}
-      </motion.div>
+      </div>
     );
     
     return (
       <div className="flex flex-col items-center">
         <div className="mb-4">
           {winner ? (
-            <motion.div 
+            <AnimatedDiv 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-xl font-bold"
             >
               Победитель: {winner}
-            </motion.div>
+            </AnimatedDiv>
           ) : (
             <div className="text-xl">
               Следующий ход: {isXNext ? 'X' : 'O'}
@@ -318,13 +356,11 @@ const MiniGames = () => {
         <div className="text-center mb-4">
           <p className="text-lg font-bold">Счет: {score}</p>
           {gameOver && (
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+            <AnimatedDiv 
               className="text-red-500 font-bold"
             >
               Игра окончена! Ваш счет: {score}
-            </motion.p>
+            </AnimatedDiv>
           )}
         </div>
         
@@ -333,62 +369,45 @@ const MiniGames = () => {
           <div className="absolute left-1/2 w-4 h-full bg-yellow-400 transform -translate-x-1/2">
             <div className="h-full flex flex-col justify-around">
               {Array(10).fill(null).map((_, i) => (
-                <motion.div 
+                <div 
                   key={i}
-                  className="w-full h-8 bg-gray-700"
-                  animate={gameStarted ? { 
-                    y: ['-100%', '0%', '100%'],
-                  } : {}}
-                  transition={gameStarted ? { 
-                    repeat: Infinity,
-                    duration: 1,
-                    ease: "linear",
-                    delay: i * 0.1
-                  } : {}}
+                  className={`w-full h-8 bg-gray-700 ${gameStarted ? 'animate-road-mark' : ''}`}
+                  style={{
+                    animationDelay: `${i * 0.1}s`
+                  }}
                 />
               ))}
             </div>
           </div>
           
           {/* Player car */}
-          <motion.div 
-            className="absolute bottom-10 w-10 h-16 bg-red-500 rounded-md"
+          <div 
+            className={`absolute bottom-10 w-10 h-16 bg-red-500 rounded-md ${gameStarted ? 'animate-car-move' : ''}`}
             style={{ left: 'calc(50% - 20px)' }}
-            animate={gameStarted ? { x: [0, 20, -20, 0] } : {}}
-            transition={gameStarted ? { 
-              repeat: Infinity, 
-              duration: 5,
-              times: [0, 0.3, 0.7, 1]
-            } : {}}
           >
             <div className="w-10 h-3 bg-blue-500 absolute top-0"></div>
             <div className="w-8 h-2 bg-yellow-400 absolute bottom-1 left-1"></div>
-          </motion.div>
+          </div>
           
           {/* Obstacle cars */}
           {gameStarted && (
             <>
-              <motion.div 
-                className="absolute w-8 h-14 bg-green-500 rounded-md"
-                style={{ left: 'calc(35% - 15px)', top: '-50px' }}
-                animate={{ y: ['0%', '120%'] }}
-                transition={{ 
-                  repeat: Infinity,
-                  duration: 2 + Math.random() * 2,
-                  ease: "linear",
-                  repeatDelay: Math.random() * 1
+              <div 
+                className="absolute w-8 h-14 bg-green-500 rounded-md animate-obstacle"
+                style={{ 
+                  left: 'calc(35% - 15px)', 
+                  top: '-50px',
+                  animationDuration: `${2 + Math.random() * 2}s`,
+                  animationDelay: "0s"
                 }}
               />
-              <motion.div 
-                className="absolute w-8 h-14 bg-purple-500 rounded-md"
-                style={{ left: 'calc(65% - 15px)', top: '-80px' }}
-                animate={{ y: ['0%', '120%'] }}
-                transition={{ 
-                  repeat: Infinity,
-                  duration: 1.5 + Math.random() * 2,
-                  ease: "linear",
-                  repeatDelay: Math.random() * 2,
-                  delay: 1
+              <div 
+                className="absolute w-8 h-14 bg-purple-500 rounded-md animate-obstacle"
+                style={{ 
+                  left: 'calc(65% - 15px)', 
+                  top: '-80px',
+                  animationDuration: `${1.5 + Math.random() * 2}s`,
+                  animationDelay: "1s"
                 }}
               />
             </>
@@ -459,26 +478,22 @@ const MiniGames = () => {
         
         <div className="grid grid-cols-3 gap-4 mb-4">
           {Array(9).fill(null).map((_, index) => (
-            <motion.div 
+            <div 
               key={index}
-              className="relative w-16 h-16 bg-green-300 rounded-full overflow-hidden cursor-pointer"
+              className="relative w-16 h-16 bg-green-300 rounded-full overflow-hidden cursor-pointer transition-transform duration-100 active:scale-90"
               onClick={() => whackMole(index)}
-              whileTap={{ scale: 0.9 }}
             >
               {index === activeMole && (
-                <motion.div 
-                  className="absolute inset-0 bg-brown-500 flex items-center justify-center"
-                  initial={{ y: 16 }}
-                  animate={{ y: 0 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                <div 
+                  className="absolute inset-0 bg-brown-500 flex items-center justify-center animate-mole-appear"
                 >
                   <div className="w-10 h-5 bg-red-400 rounded-t-full"></div>
                   <div className="absolute top-8 w-8 h-3 bg-black rounded-full"></div>
                   <div className="absolute top-8 left-3 w-2 h-2 bg-white rounded-full"></div>
                   <div className="absolute top-8 right-3 w-2 h-2 bg-white rounded-full"></div>
-                </motion.div>
+                </div>
               )}
-            </motion.div>
+            </div>
           ))}
         </div>
         
@@ -530,13 +545,13 @@ const MiniGames = () => {
         <div className="text-center mb-4">
           <p className="text-lg font-bold">Счет: {score}</p>
           {currentWord ? (
-            <motion.p 
+            <AnimatedDiv 
               className="text-2xl font-bold mt-2"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
             >
               {scrambledWord}
-            </motion.p>
+            </AnimatedDiv>
           ) : (
             <p>Нажмите "Начать", чтобы играть</p>
           )}
@@ -556,13 +571,11 @@ const MiniGames = () => {
         )}
         
         {message && (
-          <motion.p 
+          <AnimatedDiv 
             className={`mt-2 font-bold ${message === "Правильно!" ? "text-green-500" : "text-red-500"}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
           >
             {message}
-          </motion.p>
+          </AnimatedDiv>
         )}
         
         {!currentWord && (
@@ -640,14 +653,14 @@ const MiniGames = () => {
         <div className="text-center mb-4">
           <p className="text-lg font-bold">Счет: {score}</p>
           {gameActive ? (
-            <motion.div
+            <AnimatedDiv
               className="mt-2 p-2 rounded bg-blue-100"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
             >
               <p className="text-2xl font-bold">{question}</p>
               <p className="text-sm">Время: {timeLeft} сек</p>
-            </motion.div>
+            </AnimatedDiv>
           ) : (
             <p>Нажмите "Начать", чтобы играть</p>
           )}
@@ -669,13 +682,11 @@ const MiniGames = () => {
         )}
         
         {message && (
-          <motion.p 
+          <AnimatedDiv 
             className={`mt-2 font-bold ${message.includes("Правильно") ? "text-green-500" : "text-red-500"}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
           >
             {message}
-          </motion.p>
+          </AnimatedDiv>
         )}
       </div>
     );
@@ -697,15 +708,15 @@ const MiniGames = () => {
             if (value === 4) bgColor = "bg-orange-200";
             
             return (
-              <motion.div 
+              <div 
                 key={index}
-                className={`w-16 h-16 ${bgColor} rounded-md flex items-center justify-center font-bold text-xl`}
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                className={`w-16 h-16 ${bgColor} rounded-md flex items-center justify-center font-bold text-xl transition-all duration-300 ease-in-out`}
+                style={{
+                  animation: value > 0 ? 'tile-appear 0.3s ease-in-out' : 'none'
+                }}
               >
                 {value > 0 ? value : ""}
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -790,20 +801,16 @@ const MiniGames = () => {
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
-        <motion.h1
+        <AnimatedDiv
           className="text-4xl font-bold text-center text-purple-800 mb-8"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          delay={0.2}
         >
           Мини-Игры
-        </motion.h1>
+        </AnimatedDiv>
         
-        <motion.div
+        <AnimatedDiv
           className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6 mb-8"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3 }}
+          delay={0.3}
         >
           <div className="flex items-center mb-4">
             <Gamepad2 className="w-8 h-8 text-purple-600 mr-2" />
@@ -813,7 +820,7 @@ const MiniGames = () => {
             Выберите одну из наших захватывающих мини-игр и наслаждайтесь игровым процессом прямо сейчас. 
             Никаких загрузок или установок не требуется. Все игры оптимизированы для мобильных и настольных устройств.
           </p>
-        </motion.div>
+        </AnimatedDiv>
         
         {activeGame ? (
           <div className="max-w-3xl mx-auto">
@@ -830,41 +837,22 @@ const MiniGames = () => {
               </h2>
             </div>
             
-            <motion.div 
+            <AnimatedDiv 
               className="bg-white rounded-lg shadow-lg p-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
               {games.find(g => g.id === activeGame)?.game}
-            </motion.div>
+            </AnimatedDiv>
           </div>
         ) : (
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            variants={{
-              hidden: { opacity: 0 },
-              show: { 
-                opacity: 1,
-                transition: { staggerChildren: 0.1 }
-              }
-            }}
-            initial="hidden"
-            animate="show"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {games.map((game, index) => (
-              <motion.div
+              <AnimatedDiv
                 key={game.id}
-                className={`${game.color} rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300`}
+                className={`${game.color} rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 hover:scale-105 active:scale-95`}
+                delay={index * 0.1}
                 onClick={() => setActiveGame(game.id)}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  show: { opacity: 1, y: 0 }
-                }}
-                whileHover={{ 
-                  scale: 1.03,
-                  transition: { type: "spring", stiffness: 400 }
-                }}
-                whileTap={{ scale: 0.98 }}
               >
                 <div className="p-6">
                   <div className="flex items-center mb-3">
@@ -880,9 +868,9 @@ const MiniGames = () => {
                 </div>
                 
                 <div className="h-1 bg-gradient-to-r from-purple-500 to-pink-500"></div>
-              </motion.div>
+              </AnimatedDiv>
             ))}
-          </motion.div>
+          </div>
         )}
       </main>
       
@@ -892,6 +880,52 @@ const MiniGames = () => {
           <p className="text-indigo-300 mt-2">Играйте в мини-игры прямо в браузере!</p>
         </div>
       </footer>
+      
+      <style jsx global>{`
+        @keyframes tile-appear {
+          0% { transform: scale(0); }
+          50% { transform: scale(1.1); }
+          100% { transform: scale(1); }
+        }
+        
+        @keyframes road-mark {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
+        }
+        
+        @keyframes car-move {
+          0% { transform: translateX(0); }
+          30% { transform: translateX(20px); }
+          70% { transform: translateX(-20px); }
+          100% { transform: translateX(0); }
+        }
+        
+        @keyframes obstacle {
+          0% { transform: translateY(0%); }
+          100% { transform: translateY(120%); }
+        }
+        
+        @keyframes mole-appear {
+          0% { transform: translateY(16px); }
+          100% { transform: translateY(0); }
+        }
+        
+        .animate-road-mark {
+          animation: road-mark 1s linear infinite;
+        }
+        
+        .animate-car-move {
+          animation: car-move 5s ease-in-out infinite;
+        }
+        
+        .animate-obstacle {
+          animation: obstacle 2s linear infinite;
+        }
+        
+        .animate-mole-appear {
+          animation: mole-appear 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
