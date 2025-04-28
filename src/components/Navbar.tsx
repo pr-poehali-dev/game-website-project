@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Menu, X, ChevronDown, User } from "lucide-react";
+import { Menu, X, ChevronDown, User, Gamepad2 } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,11 +60,20 @@ const Navbar = () => {
                   >
                     Бесплатные игры
                   </Link>
+                  <Link 
+                    to="/mini-games" 
+                    className="block px-4 py-2 hover:bg-game-primary/20 hover:text-game-accent transition-colors flex items-center gap-2"
+                  >
+                    <Gamepad2 size={16} /> Мини-игры
+                  </Link>
                 </div>
               </div>
             )}
           </div>
           <Link to="/free-games" className="hover:text-game-accent transition-colors">Бесплатные игры</Link>
+          <Link to="/mini-games" className="hover:text-game-accent transition-colors flex items-center gap-1">
+            <Gamepad2 size={16} /> Мини-игры
+          </Link>
           <Link to="/rules" className="hover:text-game-accent transition-colors">Правила</Link>
           <a href="#" className="hover:text-game-accent transition-colors">Обзоры</a>
         </div>
@@ -87,6 +96,9 @@ const Navbar = () => {
             <Link to="/racing-game" className="hover:text-game-accent transition-colors">Гонки</Link>
             <Link to="/car-game" className="hover:text-game-accent transition-colors">Симулятор Вождения</Link>
             <Link to="/free-games" className="hover:text-game-accent transition-colors">Бесплатные игры</Link>
+            <Link to="/mini-games" className="hover:text-game-accent transition-colors flex items-center gap-2">
+              <Gamepad2 size={16} /> Мини-игры
+            </Link>
             <Link to="/rules" className="hover:text-game-accent transition-colors">Правила</Link>
             <a href="#" className="hover:text-game-accent transition-colors">Обзоры</a>
             <Link to="/profile" className="hover:text-game-accent transition-colors">Профиль</Link>

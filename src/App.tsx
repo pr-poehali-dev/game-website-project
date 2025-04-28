@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import GameRules from "./pages/GameRules";
 import FreeGames from "./pages/FreeGames";
+import MiniGames from "./pages/MiniGames";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/rules" element={<GameRules />} />
           <Route path="/free-games" element={<FreeGames />} />
+          <Route path="/mini-games" element={<MiniGames />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
