@@ -4,7 +4,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Info, AlertTriangle, BookOpen, Car, Trophy, Download, ArrowRight } from "lucide-react";
+import { Info, AlertTriangle, BookOpen, Car, Trophy, Download, ArrowRight, ShieldCheck, Zap, Award } from "lucide-react";
 
 const GameRules = () => {
   return (
@@ -18,6 +18,21 @@ const GameRules = () => {
             <p className="text-muted-foreground">
               Узнайте все правила наших игр, чтобы улучшить свой игровой опыт
             </p>
+          </div>
+          
+          {/* Баннер с картинкой */}
+          <div className="relative rounded-xl overflow-hidden mb-12 shadow-xl">
+            <img 
+              src="https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+              alt="Гоночные автомобили" 
+              className="w-full h-64 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
+              <div className="p-6 text-white">
+                <h2 className="text-2xl font-bold mb-2">Правила для чемпионов</h2>
+                <p>Соблюдайте правила игры, чтобы получить максимум удовольствия и стать победителем</p>
+              </div>
+            </div>
           </div>
           
           <Tabs defaultValue="racing">
@@ -49,6 +64,32 @@ const GameRules = () => {
                       Заезды проводятся по официальным правилам. Использование читов и эксплойтов запрещено!
                     </AlertDescription>
                   </Alert>
+                  
+                  {/* Картинка с правилами */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div className="rounded-lg overflow-hidden shadow-md">
+                      <img 
+                        src="https://images.unsplash.com/photo-1517026575980-3e1e2dedeab4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                        alt="Старт гонки" 
+                        className="w-full h-60 object-cover"
+                      />
+                      <div className="p-4 bg-muted">
+                        <h3 className="font-medium mb-1">Правила старта</h3>
+                        <p className="text-sm text-muted-foreground">Старт по сигналу светофора. Фальстарт наказывается штрафом в 5 секунд.</p>
+                      </div>
+                    </div>
+                    <div className="rounded-lg overflow-hidden shadow-md">
+                      <img 
+                        src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                        alt="Обгон на трассе" 
+                        className="w-full h-60 object-cover"
+                      />
+                      <div className="p-4 bg-muted">
+                        <h3 className="font-medium mb-1">Правила обгона</h3>
+                        <p className="text-sm text-muted-foreground">Запрещены намеренные столкновения. Блокировка более трех раз на одном участке запрещена.</p>
+                      </div>
+                    </div>
+                  </div>
                   
                   <Accordion type="single" collapsible className="mb-8">
                     <AccordionItem value="item-1">
@@ -232,6 +273,43 @@ const GameRules = () => {
                     </AlertDescription>
                   </Alert>
                   
+                  {/* Картинки с правилами */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div className="overflow-hidden rounded-lg shadow-md">
+                      <img 
+                        src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                        alt="Городское вождение" 
+                        className="w-full h-40 object-cover"
+                      />
+                      <div className="p-3 bg-muted">
+                        <h3 className="font-medium text-sm">Городское вождение</h3>
+                        <p className="text-xs text-muted-foreground">Макс. скорость: 60 км/ч</p>
+                      </div>
+                    </div>
+                    <div className="overflow-hidden rounded-lg shadow-md">
+                      <img 
+                        src="https://images.unsplash.com/photo-1593460354636-57980c53ed0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                        alt="Трасса" 
+                        className="w-full h-40 object-cover"
+                      />
+                      <div className="p-3 bg-muted">
+                        <h3 className="font-medium text-sm">Трасса</h3>
+                        <p className="text-xs text-muted-foreground">Макс. скорость: 90-120 км/ч</p>
+                      </div>
+                    </div>
+                    <div className="overflow-hidden rounded-lg shadow-md">
+                      <img 
+                        src="https://images.unsplash.com/photo-1504371601740-d0e285e3f23a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                        alt="Бездорожье" 
+                        className="w-full h-40 object-cover"
+                      />
+                      <div className="p-3 bg-muted">
+                        <h3 className="font-medium text-sm">Бездорожье</h3>
+                        <p className="text-xs text-muted-foreground">Без ограничений скорости</p>
+                      </div>
+                    </div>
+                  </div>
+                  
                   <Accordion type="single" collapsible className="mb-8">
                     <AccordionItem value="item-1">
                       <AccordionTrigger>Режимы симуляции</AccordionTrigger>
@@ -386,6 +464,31 @@ const GameRules = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
+                  {/* Инфографика с правилами */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div className="bg-muted/60 rounded-lg p-5 text-center shadow-md transform hover:scale-105 transition-transform">
+                      <div className="bg-game-primary/20 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <ShieldCheck className="h-8 w-8 text-game-primary" />
+                      </div>
+                      <h3 className="font-semibold mb-2">Безопасность</h3>
+                      <p className="text-sm text-muted-foreground">Используйте сильные пароли и не делитесь личной информацией</p>
+                    </div>
+                    <div className="bg-muted/60 rounded-lg p-5 text-center shadow-md transform hover:scale-105 transition-transform">
+                      <div className="bg-game-primary/20 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <Zap className="h-8 w-8 text-game-primary" />
+                      </div>
+                      <h3 className="font-semibold mb-2">Честная игра</h3>
+                      <p className="text-sm text-muted-foreground">Запрещены читы, боты и другие средства получения преимущества</p>
+                    </div>
+                    <div className="bg-muted/60 rounded-lg p-5 text-center shadow-md transform hover:scale-105 transition-transform">
+                      <div className="bg-game-primary/20 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <Award className="h-8 w-8 text-game-primary" />
+                      </div>
+                      <h3 className="font-semibold mb-2">Уважение</h3>
+                      <p className="text-sm text-muted-foreground">Уважайте других игроков и придерживайтесь этикета общения</p>
+                    </div>
+                  </div>
+                  
                   <div className="space-y-8">
                     <div>
                       <h3 className="text-lg font-semibold mb-4">Учетная запись и безопасность</h3>
@@ -404,6 +507,22 @@ const GameRules = () => {
                           <strong>Передача аккаунта:</strong> Продажа, обмен или передача аккаунтов строго запрещены.
                         </li>
                       </ul>
+                    </div>
+                    
+                    {/* Баннер с картинкой */}
+                    <div className="relative rounded-xl overflow-hidden my-8 shadow-xl">
+                      <img 
+                        src="https://images.unsplash.com/photo-1565108475358-b4d84c1b0390?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                        alt="Игроки за компьютерами" 
+                        className="w-full h-48 object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
+                        <div className="p-6 text-white max-w-xl">
+                          <h2 className="text-xl font-bold mb-2">Играйте честно, уважайте других</h2>
+                          <p className="text-sm">Наше игровое сообщество ценит честную игру и взаимное уважение. 
+                          Нарушители правил могут быть временно или постоянно заблокированы.</p>
+                        </div>
+                      </div>
                     </div>
                     
                     <div>
